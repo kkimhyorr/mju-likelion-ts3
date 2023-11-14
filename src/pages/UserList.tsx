@@ -2,7 +2,7 @@ import useSWR from "swr";
 
 const fetchData = async (url: string) => {
   const response = await fetch(
-    `http://ec2-13-125-247-33.ap-northeast-2.compute.amazonaws.com:3000${url}`
+    `https://simple-login-server-one.vercel.app${url}`
   );
   const data = await response.json();
   console.log();
@@ -17,8 +17,15 @@ const UserList = () => {
 
   return (
     <div>
-      <h1>API에서 가져온 데이터</h1>
-      <div>{JSON.stringify(data.data.users)}</div>
+      <h1>UserList</h1>
+      <div>
+        {data.data.users.map((user: any, index: any) => (
+          <div key={index}>
+            <p>{user.username}</p>
+            <p>{user.email}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
