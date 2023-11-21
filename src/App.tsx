@@ -1,35 +1,39 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useNavigate, Routes, Route, Link } from "react-router-dom";
 import UserList from "./pages/UserList";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-
-function Home() {
-  return (
-    <div>
-      <button>
-        <Link to="/api/users">UserList</Link>
-      </button>
-      <button>
-        <Link to="/api/auth/register">Register</Link>
-      </button>
-      <button>
-        <Link to="/api/auth/login">Login</Link>
-      </button>
-    </div>
-  );
-}
+import { ThemeProvider } from "styled-components";
+import { theme } from "./DS/theme";
+import { GlobalFont } from "./DS/GlobalFont";
+import GlobalStyle from "./DS/GlobalStyle";
+import Header from "./components/Header";
 
 function App() {
+  const navigate = useNavigate();
+  const tabs = [
+    {
+      id: 0,
+      title: "로그인",
+      url: "/api/auth/login",
+    },
+    {
+      id: 1,
+      title: "회원가입",
+      url: "/api/auth/register",
+    },
+  ];
+
   return (
-    <Router>
+    <ThemeProvider theme={theme}>
+      <GlobalFont />
+      <GlobalStyle />
+      <Header onClickLogo={() => navigate("/")} tabs={tabs} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/api/users" element={<UserList />} />
+        <Route path="/" element={<UserList />} />
         <Route path="/api/auth/register" element={<Register />} />
         <Route path="/api/auth/login" element={<Login />} />
       </Routes>
-    </Router>
+    </ThemeProvider>
   );
 }
 

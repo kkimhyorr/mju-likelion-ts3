@@ -1,9 +1,13 @@
 import useSWR from "swr";
 
+interface UserForm {
+  email: string;
+  password: string;
+  username: string;
+}
+
 const fetchData = async (url: string) => {
-  const response = await fetch(
-    `https://simple-login-server-one.vercel.app${url}`
-  );
+  const response = await fetch(process.env.REACT_APP_BASE_URL + url);
   const data = await response.json();
   console.log();
   return data;
@@ -19,7 +23,7 @@ const UserList = () => {
     <div>
       <h1>UserList</h1>
       <div>
-        {data.data.users.map((user: any, index: any) => (
+        {data.data.users.map((user: UserForm, index: number) => (
           <div key={index}>
             <p>{user.username}</p>
             <p>{user.email}</p>

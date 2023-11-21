@@ -1,31 +1,26 @@
-import { Formik, Field, Form, FormikHelpers } from "formik";
+import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
+import useSWRMutation from "swr/mutation";
+import { PostFetcher } from "../API/PostFetcher";
 
 interface LoginForm {
   email: string;
   password: string;
 }
 
-const fetchData = async (url: string, data: LoginForm) => {
-  const response = await fetch(
-    `https://simple-login-server-one.vercel.app${url}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  const result = await response.json();
-  return result;
-};
-
 const Login = () => {
   const navigate = useNavigate();
-  const handleGoUserList = () => {
-    navigate("/api/users");
-  };
+  const { trigger } = useSWRMutation("/api/auth/login", PostFetcher, {
+    onSuccess: async (data) => {
+      const res: any = await data.json();
+      if (data.status === 200) {
+        navigate("/");
+        alert(res.data.message);
+      } else {
+        alert(res.error.message);
+      }
+    },
+  });
 
   return (
     <>
@@ -34,30 +29,14 @@ const Login = () => {
           email: "",
           password: "",
         }}
-        onSubmit={(
-          values: LoginForm,
-          { setSubmitting }: FormikHelpers<LoginForm>
-        ) => {
-          fetchData("/api/auth/register", values)
-            .then((result) => {
-              // 처리된 결과에 따른 작업 수행
-              console.log(result);
-            })
-            .catch((error) => {
-              // 에러 처리
-              console.error(error);
-            })
-            .finally(() => {
-              setSubmitting(false);
-            });
+        onSubmit={(values: any) => {
+          trigger(values);
         }}
       >
         <Form>
           <Field id="email" name="email" placeholder="email"></Field>
           <Field id="password" name="password" placeholder="password"></Field>
-          <button type="submit" onClick={handleGoUserList}>
-            login
-          </button>
+          <button type="submit">login</button>
         </Form>
       </Formik>
     </>
