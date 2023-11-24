@@ -1,4 +1,4 @@
-import { Formik, Field, Form } from "formik";
+import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import useSWRMutation from "swr/mutation";
 import { PostFetcher } from "../API/PostFetcher";
@@ -31,16 +31,32 @@ const Login = () => {
           trigger(values);
         }}
       >
-        <Form>
-          <Container>
-            <TitleText>로그인</TitleText>
-            <InputContainer>
-              <Input>이메일</Input>
-              <Input>비밀번호</Input>
-            </InputContainer>
-            <Button type="submit">로그인</Button>
-          </Container>
-        </Form>
+        {(props) => (
+          <Form>
+            <Container>
+              <TitleText>로그인</TitleText>
+              <InputContainer>
+                <Input
+                  value={props.values.email}
+                  onChange={props.handleChange}
+                  name="email"
+                  type="text"
+                >
+                  이메일
+                </Input>
+                <Input
+                  value={props.values.password}
+                  onChange={props.handleChange}
+                  name="password"
+                  type="password"
+                >
+                  비밀번호
+                </Input>
+              </InputContainer>
+              <Button type="submit">로그인</Button>
+            </Container>
+          </Form>
+        )}
       </Formik>
     </>
   );

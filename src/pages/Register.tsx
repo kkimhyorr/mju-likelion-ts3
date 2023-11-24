@@ -1,4 +1,4 @@
-import { Formik, Field, Form } from "formik";
+import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import useSWRMutation from "swr/mutation";
 import { PostFetcher } from "../API/PostFetcher";
@@ -37,7 +37,7 @@ const Register = () => {
         }}
         onSubmit={(values: UserForm) => {
           trigger(values);
-          console.log(values);
+          // console.log(values);
         }}
       >
         {(props) => (
