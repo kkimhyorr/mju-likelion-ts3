@@ -1,4 +1,4 @@
-interface RegisterForm {
+interface PostUserForm {
   email: string;
   password: string;
   username: string;
@@ -6,7 +6,7 @@ interface RegisterForm {
 
 export const PostFetcher = async (
   url: string,
-  { arg }: { arg: RegisterForm }
+  { arg }: { arg: PostUserForm }
 ) => {
   const response = await fetch(`${process.env.REACT_APP_BASE_URL}${url}`, {
     method: "POST",
