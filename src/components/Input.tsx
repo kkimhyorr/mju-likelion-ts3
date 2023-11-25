@@ -1,10 +1,12 @@
 import { styled } from "styled-components";
+import { ErrorMessage } from "formik";
 
 export const Input = ({ children, ...rest }: any) => {
   return (
     <Container>
       <TitleText>{children}</TitleText>
       <InputBox {...rest} />
+      <ErrorMessage name={rest.name} component={HelperText} />
     </Container>
   );
 };
@@ -38,4 +40,12 @@ const InputBox = styled.input`
     outline: none;
     border: 1px solid ${({ theme }) => theme.color.gray1};
   }
+`;
+
+const HelperText = styled.div`
+  color: ${({ theme }) => theme.color.red};
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
 `;

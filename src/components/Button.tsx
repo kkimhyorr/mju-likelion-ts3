@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 const Button = ({ children }: any) => {
   return (
     <>
-      <SubmitButton>{children}</SubmitButton>
+      <SubmitButton type="submit">{children}</SubmitButton>
     </>
   );
 };

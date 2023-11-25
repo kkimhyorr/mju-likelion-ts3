@@ -5,6 +5,7 @@ import { PostFetcher } from "../API/PostFetcher";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { styled } from "styled-components";
+import * as Yup from "yup";
 
 interface UserForm {
   email: string;
@@ -12,12 +13,22 @@ interface UserForm {
   username: string;
 }
 
+const RegisterSchema = () => {
+  return Yup.object().shape({
+    username: Yup.string().required("이름을 입력해주세요"),
+    email: Yup.string()
+      .email("이메일 형식이 올바르지 않습니다")
+      .max(255)
+      .required("이메일을 입력해주세요"),
+    password: Yup.string().max(255).required("비밀번호를 입력해주세요"),
+  });
+};
+
 const Register = () => {
   const navigate = useNavigate();
   const { trigger } = useSWRMutation("/api/auth/register", PostFetcher, {
     onSuccess: async (data) => {
       const res: any = await data.json();
-
       if (data.status === 200) {
         alert(res.data.message);
         navigate("/api/auth/login");
@@ -37,8 +48,12 @@ const Register = () => {
         }}
         onSubmit={(values: UserForm) => {
           trigger(values);
-          // console.log(values);
+          console.log(values);
         }}
+        validationSchema={RegisterSchema()}
+        validateOnChange={true}
+        validateOnBlur={true}
+        validateOnMount={true}
       >
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
@@ -56,6 +71,7 @@ const Register = () => {
                 <Input
                   value={props.values.email}
                   onChange={props.handleChange}
+                  onBlur={() => props.handleBlur("email")}
                   name="email"
                   type="text"
                 >
@@ -64,13 +80,14 @@ const Register = () => {
                 <Input
                   value={props.values.password}
                   onChange={props.handleChange}
+                  onBlur={() => props.handleBlur("password")}
                   name="password"
                   type="password"
                 >
                   비밀번호
                 </Input>
               </InputContainer>
-              <Button type="submit">가입하기</Button>
+              <Button>가입하기</Button>
             </Container>
           </Form>
         )}
